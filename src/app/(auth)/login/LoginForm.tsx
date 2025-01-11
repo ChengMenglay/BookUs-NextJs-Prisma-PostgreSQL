@@ -105,7 +105,7 @@ export default function LoginForm() {
             </form>
           </Form>
           <CardDescription className="text-center">
-            Don't have an account?
+            Do not have an account?
             <Link href={"/register"} className="underline text-blue-600 ml-2">
               Sign up
             </Link>

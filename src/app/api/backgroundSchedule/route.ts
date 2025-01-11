@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import dayjs from "dayjs";
 import { NextRequest } from "next/server";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const currentDate = dayjs().toDate();
     // Archive outdated schedules with booked seats
@@ -23,19 +23,31 @@ export async function GET(request: NextRequest) {
     });
 
     // Prepare new schedules without IDs and with updated data
-    const newSchedules = archivedSchedules.map(
-      ({ id, departure_date, ...schedule }) => ({
-        ...schedule,
-        departure_date: null, // Update with a valid default if required
-        status: "Active",
-      })
-    );
+    const newSchedules = archivedSchedules.map(({ ...schedule }) => ({
+      ...schedule,
+      departure_date: null, // Update with a valid default if required
+      status: "Active",
+    }));
 
     // Batch create new schedules
     if (newSchedules.length > 0) {
-      await prisma.schedule.createMany({
-        data: newSchedules,
-      });
+      newSchedules.map((schedule) =>
+        prisma.schedule.create({
+          data: {
+            busId: schedule.busId,
+            routeId: schedule.routeId,
+            departure_date: null,
+            departure_time: schedule.departure_time,
+            arrival_time: schedule.arrival_time,
+            boarding_point: schedule.boarding_point,
+            boarding_url: schedule.boarding_url,
+            dropping_point: schedule.dropping_point,
+            dropping_url: schedule.dropping_url,
+            price: schedule.price,
+            available_seat: schedule.available_seat,
+          },
+        })
+      );
     }
 
     console.log(`Archived and created ${newSchedules.length} new schedules.`);

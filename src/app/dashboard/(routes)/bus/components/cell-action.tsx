@@ -30,6 +30,7 @@ export default function CellAction({ data }: CellActionProps) {
       toast.success("Delete successfully");
       router.refresh();
     } catch (error) {
+      console.log(error);
       toast.error("Something when wrong!");
     }
   };

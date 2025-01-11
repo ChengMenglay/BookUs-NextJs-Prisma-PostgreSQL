@@ -31,11 +31,11 @@ export default function UserMenu({ role, name }: UserMenuProps) {
             </span>
             <Button
               className="w-full bg-blue-700 hover:bg-blue-600 hover:text-white"
-              onClick={() => {
+              onClick={() =>
                 role === "Admin"
                   ? router.push(`/dashboard`)
-                  : router.push(`/profile`);
-              }}
+                  : router.push(`/profile`)
+              }
             >
               Dashboard
             </Button>

@@ -15,7 +15,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { User } from "@prisma/client";
 import { format, parse } from "date-fns";
 
 export const description = "An interactive bar chart";

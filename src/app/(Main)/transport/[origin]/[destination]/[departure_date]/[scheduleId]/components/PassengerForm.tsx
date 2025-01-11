@@ -77,7 +77,7 @@ export default function PassengerForm({
   const getCountryData = async () => {
     const response = await axios.get("https://restcountries.com/v3.1/all");
     const countries = response.data
-      .map((country: any) => country.name.common)
+      .map((country: { name: { common: string } }) => country.name.common)
       .sort();
     setCountries(countries);
   };
@@ -103,7 +103,8 @@ export default function PassengerForm({
       );
       window.location = result.data.url;
     } catch (error) {
-      toast.error("Server Error!");
+      console.log(error);
+      toast.error("Server Error!: ");
     } finally {
       setIsLoading(false);
     }
