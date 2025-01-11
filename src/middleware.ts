@@ -18,10 +18,11 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
   if (adminPath.some((path) => pathname.startsWith(path))) {
-    if (!isLoggined || token.role !== "Admin") {
+    if (!isLoggined || token?.role !== "Admin") {
       return NextResponse.redirect(new URL("/", req.url));
     }
   }
+  console.log(token?.role);
   return NextResponse.next();
 }
 export const config = {

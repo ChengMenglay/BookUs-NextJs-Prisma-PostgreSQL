@@ -50,6 +50,11 @@ const formSchema = z.object({
   email: z.string().email(),
 });
 type PassengerFormValue = z.infer<typeof formSchema>;
+type Country = {
+  name: {
+    common: string;
+  };
+};
 export default function PassengerForm({
   scheduleId,
   currentUser,
@@ -75,9 +80,11 @@ export default function PassengerForm({
     getCountryData();
   }, []);
   const getCountryData = async () => {
-    const response = await axios.get("https://restcountries.com/v3.1/all");
+    const response = await axios.get<Country[]>(
+      "https://restcountries.com/v3.1/all"
+    );
     const countries = response.data
-      .map((country: { name: { common: string } }) => country.name.common)
+      .map((country) => country.name.common)
       .sort();
     setCountries(countries);
   };
