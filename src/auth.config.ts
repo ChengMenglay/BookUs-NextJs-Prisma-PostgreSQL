@@ -34,7 +34,6 @@ export default {
           console.error("Invalid password for user:", email);
           return null;
         }
-        console.log("User Respone", user);
         return user; // Return user object on successful authentication
       },
     }),
