@@ -22,7 +22,7 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/", req.url));
     }
   }
-  console.log(token?.role);
+  console.log("=======Token Role: ", token?.role);
   return NextResponse.next();
 }
 export const config = {
