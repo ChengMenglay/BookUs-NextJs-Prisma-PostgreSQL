@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { parse } from "date-fns";
 import BookingDetail from "./components/BookingDetail";
-import { getCurrentUser, getUserId } from "@/app/(auth)/actions/authAction";
+import { getUserId } from "@/app/(auth)/actions/authAction";
 import { getBookedSeat } from "@/app/actions/getBookedSeat";
 import { getBusySeat } from "@/app/actions/getBusySeat";
 

@@ -4,9 +4,9 @@ import { Card, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { formatter } from "@/lib/utils";
 import { format } from "date-fns";
-import { ArrowLeft, ArrowRight, Calendar, Download, User } from "lucide-react";
+import { ArrowLeft, ArrowRight, Calendar, Download } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import html2canvas from "html2canvas";
 type Props = {

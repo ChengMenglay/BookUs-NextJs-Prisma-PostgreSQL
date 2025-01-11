@@ -19,15 +19,6 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { Trash } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import ImageUpload from "@/components/ui/Image-upload";
 import { Separator } from "@/components/ui/separator";
 type BusFormProps = {
@@ -67,6 +58,7 @@ export default function BusTypeForm({ initialData }: BusFormProps) {
       router.push("/dashboard/bus-type");
       router.refresh();
     } catch (error) {
+      console.log(error);
       toast.error("Something went wrong!");
     } finally {
       setIsLoading(false);
@@ -80,6 +72,7 @@ export default function BusTypeForm({ initialData }: BusFormProps) {
       router.push("/dashboard/bus-type");
       router.refresh();
     } catch (error) {
+      console.log(error);
       toast.error("Something went wrong!");
     } finally {
       setIsLoading(false);
@@ -111,8 +104,7 @@ export default function BusTypeForm({ initialData }: BusFormProps) {
                     onChange={(url) => {
                       field.onChange(url);
                     }}
-                    onDelete={(url) => {
-                      // Remove image from the list
+                    onDelete={() => {
                       field.onChange("");
                     }}
                   />

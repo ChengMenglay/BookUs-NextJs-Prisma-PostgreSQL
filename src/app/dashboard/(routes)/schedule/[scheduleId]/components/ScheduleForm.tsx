@@ -123,6 +123,7 @@ export default function ScheduleForm({
       router.push("/dashboard/schedule");
       router.refresh();
     } catch (error) {
+      console.log(error);
       toast.error("Something went wrong!");
     } finally {
       setIsLoading(false);

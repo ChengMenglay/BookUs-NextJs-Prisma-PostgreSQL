@@ -61,6 +61,7 @@ export default function UserForm({ users, provinces }: UserFormProps) {
         toast.error("Update fail!");
       }
     } catch (error) {
+      console.log(error);
     } finally {
       setIsLoading(false);
     }

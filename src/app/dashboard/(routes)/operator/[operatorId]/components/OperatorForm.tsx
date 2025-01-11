@@ -59,6 +59,7 @@ export default function OperatorForm({ initialData }: OperatorFormProps) {
       router.push("/dashboard/operator");
       router.refresh();
     } catch (error) {
+      console.log(error);
       toast.error("Something went wrong!");
     } finally {
       setIsLoading(false);
@@ -72,6 +73,7 @@ export default function OperatorForm({ initialData }: OperatorFormProps) {
       router.push("/dashboard/operator");
       router.refresh();
     } catch (error) {
+      console.log(error);
       toast.error("Something went wrong!");
     } finally {
       setIsLoading(false);

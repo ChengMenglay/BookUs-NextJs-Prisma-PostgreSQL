@@ -74,6 +74,7 @@ export default function RouteForm({ initialData, province }: RouteFormProps) {
       router.push("/dashboard/route");
       router.refresh();
     } catch (error) {
+      console.log(error);
       toast.error("Something went wrong!");
     } finally {
       setIsLoading(false);
@@ -87,6 +88,7 @@ export default function RouteForm({ initialData, province }: RouteFormProps) {
       router.push("/dashboard/route");
       router.refresh();
     } catch (error) {
+      console.log(error);
       toast.error("Something went wrong!");
     } finally {
       setIsLoading(false);
@@ -118,7 +120,7 @@ export default function RouteForm({ initialData, province }: RouteFormProps) {
                     onChange={(url) => {
                       field.onChange(url);
                     }}
-                    onDelete={(url) => {
+                    onDelete={() => {
                       // Remove image from the list
                       field.onChange("");
                     }}

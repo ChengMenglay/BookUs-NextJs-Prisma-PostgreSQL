@@ -4,7 +4,6 @@ import NavLink from "./NavLink";
 import { auth } from "@/auth";
 import { getCurrentUser } from "@/app/(auth)/actions/authAction";
 import UserMenu from "./UserMenu";
-import { Button } from "../ui/button";
 import {
   Sheet,
   SheetContent,

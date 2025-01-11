@@ -11,15 +11,18 @@ type CheckToRedirectProps = {
 };
 export default function CheckToRedirect({ role, user }: CheckToRedirectProps) {
   const router = useRouter();
+  const checkRole = () => {
+    if (role === "Admin") {
+      router.push(`/dashboard`);
+    } else {
+      router.push(`/profile`);
+    }
+  };
   return (
     <>
       {user ? (
         <Button
-          onClick={() => {
-            role === "Admin"
-              ? router.push(`/dashboard`)
-              : router.push(`/profile`);
-          }}
+          onClick={checkRole}
           className="w-full bg-blue-700 hover:bg-blue-600 hover:text-white"
         >
           Dashboard

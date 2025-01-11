@@ -77,6 +77,7 @@ export default function BusForm({ initialData, operator, type }: BusFormProps) {
       router.push("/dashboard/bus");
       router.refresh();
     } catch (error) {
+      console.log(error);
       toast.error("Something went wrong!");
     } finally {
       setIsLoading(false);
@@ -90,6 +91,7 @@ export default function BusForm({ initialData, operator, type }: BusFormProps) {
       router.push("/dashboard/bus");
       router.refresh();
     } catch (error) {
+      console.log(error);
       toast.error("Something went wrong!");
     } finally {
       setIsLoading(false);

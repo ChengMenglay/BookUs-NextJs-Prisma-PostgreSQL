@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Card } from "./ui/card";
-import { Armchair, Info, MapPin, Pointer } from "lucide-react";
+import { Armchair, Info, MapPin } from "lucide-react";
 import { Button } from "./ui/button";
 import { addDays, differenceInMinutes, format } from "date-fns";
 import { formatter } from "@/lib/utils";

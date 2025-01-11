@@ -44,6 +44,7 @@ export function BarChartComponent({ ticket }: BarChartProps) {
     React.useState<keyof typeof chartConfig>("ticket");
 
   // Aggregate tickets by unique month
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const chartData = React.useMemo(() => {
     const monthData: Record<
       string,

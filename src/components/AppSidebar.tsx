@@ -33,7 +33,6 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Link from "next/link";
 import { auth } from "@/auth";
-import SignOutButton from "./SignOut";
 import { getCurrentUser } from "@/app/(auth)/actions/authAction";
 import SignOut from "./SignOut";
 export default async function AppSidebar() {

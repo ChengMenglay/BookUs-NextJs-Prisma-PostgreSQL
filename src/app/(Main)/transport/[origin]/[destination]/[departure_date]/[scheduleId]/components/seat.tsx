@@ -15,10 +15,10 @@ export default function CustomSeatLayout({
   busySeat,
 }: CustomSeatLayoutProps) {
   const { selectedSeats, setSelectedSeats } = useSeatSelection();
-  let left: number[] = [];
-  let right: number[] = [];
+  const left: number[] = [];
+  const right: number[] = [];
   if (totalSeat === 48) {
-    let haft_Seats = totalSeat / 2;
+    const haft_Seats = totalSeat / 2;
     for (let i = 1; i <= haft_Seats; i++) {
       right.push(i);
     }
@@ -26,7 +26,7 @@ export default function CustomSeatLayout({
       left.push(i);
     }
   } else {
-    let haft_Seats = 24;
+    const haft_Seats = 24;
     for (let i = 1; i <= haft_Seats; i++) {
       right.push(i);
     }

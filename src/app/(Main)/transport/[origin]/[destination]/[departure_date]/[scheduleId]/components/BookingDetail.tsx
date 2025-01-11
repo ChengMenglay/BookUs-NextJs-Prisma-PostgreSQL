@@ -64,8 +64,8 @@ export default function BookingDetail({
   const [seatSelection, setSeatSelection] = useState<boolean>(true);
   const [passengerForm, setPassengerForm] = useState<boolean>(false);
   const [isMounted, setIsMounted] = useState<boolean>(false);
-  let subTotal = selectedSeats.length * (schedule?.price ?? 0);
-  let total = subTotal;
+  const subTotal = selectedSeats.length * (schedule?.price ?? 0);
+  const total = subTotal;
   const handleSelectedSeat = () => {
     if (selectedSeats.length > 0) {
       setSeatSelection(false);
