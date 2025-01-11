@@ -18,13 +18,15 @@ import { Input } from "@/components/ui/input";
 import { loginSchema, LoginSchema } from "@/lib/schemas/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { SignInUser } from "../actions/authAction";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
+  const [isMounted, setIsMounted] = useState(false);
+  const router = useRouter();
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -32,7 +34,12 @@ export default function LoginForm() {
       password: "",
     },
   });
-  const router = useRouter();
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  if (!isMounted) {
+    return null;
+  }
   const onSubmitted = async (data: LoginSchema) => {
     const result = await SignInUser(data);
     if (result.status === "success") {

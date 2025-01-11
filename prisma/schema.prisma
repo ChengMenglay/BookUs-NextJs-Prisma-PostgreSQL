@@ -26,6 +26,7 @@ model User {
   role          String @default("User")
   accounts      Account[]
   sessions      Session[]
+  bookings      Booking[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -130,15 +131,43 @@ model Schedule{
   bus Bus @relation(fields:[busId], references: [id])
   routeId String
   route Route @relation(fields: [routeId], references: [id])
+  departure_date DateTime?
   departure_time DateTime @db.Time()
   arrival_time DateTime @db.Time()
+  boarding_point String
+  boarding_url String
+  dropping_point String
+  dropping_url String
   price Decimal
   available_seat Int
   status String @default("Active")
   recurring   Boolean   @default(false)
   frequency       String    @default("daily")
+  bookings Booking[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([busId, routeId])
+}
+
+
+model Booking{
+  id String @id @default(cuid())
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  scheduleId String
+  schedule Schedule @relation(fields: [scheduleId], references: [id])
+  phoneNumber String
+  email String
+  passenger_name String
+  nationality String
+  gender String
+  seatNumber String[]
+  totalPrice Decimal
+  status String @default("Pending")
+  isPaid Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([scheduleId])
+  @@index([userId])
 }

@@ -17,7 +17,7 @@ import {
 import { registerSchema, RegisterSchema } from "@/lib/schemas/registerSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { RegisterUser } from "../actions/authAction";
@@ -26,6 +26,7 @@ import { useRouter } from "next/navigation";
 import { handleFormServerErrors } from "@/lib/utils";
 
 export default function RegisterForm() {
+  const [isMounted, setIsMounted] = useState(false);
   const form = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -35,6 +36,12 @@ export default function RegisterForm() {
     },
   });
   const router = useRouter();
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  if (!isMounted) {
+    return null;
+  }
   const onSubmitted = async (data: RegisterSchema) => {
     const result = await RegisterUser(data);
     if (result.status === "success") {

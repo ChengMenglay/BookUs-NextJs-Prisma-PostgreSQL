@@ -17,8 +17,8 @@ import { Separator } from "../ui/separator";
 import CheckToRedirect from "./CheckToRedirect";
 
 const items = [
-  { label: "Book Tickets", href: "/book-tickets" },
-  { label: "History", href: "/history" },
+  { label: "Book Tickets", href: "/" },
+  { label: "My Booking", href: "/my-booking" },
   { label: "About Us", href: "/about" },
   { label: "Contact Us", href: "/contact" },
 ];
@@ -26,12 +26,12 @@ export default async function Navbar() {
   const session = await auth();
   const user = session?.user && (await getCurrentUser());
   return (
-    <div className="bg-blue-700  px-4">
+    <div className="bg-white text-black fixed z-[1000] w-full shadow-lg  px-4">
       <div className="container h-16 justify-between flex items-center mx-auto">
-        <Link href={"/"} className="text-3xl text-white font-bold">
+        <Link href={"/"} className="text-3xl  font-bold">
           BookUs
         </Link>
-        <div className=" md:flex hidden space-x-4 text-white ">
+        <div className=" md:flex hidden space-x-4  ">
           {items.map((item) => (
             <NavLink key={item.label} label={item.label} href={item.href} />
           ))}
@@ -39,12 +39,12 @@ export default async function Navbar() {
         <div className="md:flex hidden">
           <UserMenu name={user?.name} role={user?.role} />
         </div>
-        <div className="md:hidden flex">
+        <div className="md:hidden flex ">
           <Sheet>
             <SheetTrigger>
-              <AlignRight color="white" className="w-6 h-6 " />
+              <AlignRight color="black" className="w-6 h-6 " />
             </SheetTrigger>
-            <SheetContent>
+            <SheetContent className="z-[1300]" side={"left"}>
               <SheetHeader className="my-2">
                 <SheetTitle className="text-2xl font-bold text-start">
                   Book Us

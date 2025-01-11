@@ -36,7 +36,6 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { Calendar } from "@/components/ui/calendar";
 type BusWithOperator = Bus & {
   operator: {
     name: string;
@@ -53,6 +52,10 @@ const formSchema = z.object({
   routeId: z.string().min(1),
   departure_time: z.preprocess((value) => new Date(value as string), z.date()),
   arrival_time: z.preprocess((value) => new Date(value as string), z.date()),
+  boarding_point: z.string().min(1),
+  boarding_url: z.string().min(1),
+  dropping_point: z.string().min(1),
+  dropping_url: z.string().min(1),
   price: z.coerce.number(),
   frequency: z.string().min(1),
   status: z.string().min(1),
@@ -75,6 +78,10 @@ export default function ScheduleForm({
           routeId: "",
           departure_time: undefined,
           arrival_time: undefined,
+          boarding_point: "",
+          boarding_url: "",
+          dropping_point: "",
+          dropping_url: "",
           price: 0,
           frequency: "",
           status: "",
@@ -198,6 +205,74 @@ export default function ScheduleForm({
                       </SelectGroup>
                     </SelectContent>
                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="boarding_point"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Boarding Point</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isLoading}
+                      placeholder="Boarding point"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="boarding_url"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Boarding Url</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isLoading}
+                      placeholder="Boarding url"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="dropping_point"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Dropping Point</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isLoading}
+                      placeholder="Dropping point"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="dropping_url"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Dropping Url</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isLoading}
+                      placeholder="dropping_url"
+                      {...field}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

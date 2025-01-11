@@ -18,6 +18,9 @@ export default async function OrderPage() {
     id: item.id,
     bus: item.bus.number + " - " + item.bus.operator.name,
     route: item.route.origin + " - " + item.route.destination,
+    departure_date: item.departure_date
+      ? format(item.departure_date, "dd-MM-yyy")
+      : item.departure_date,
     departure_time: format(item.departure_time, "HH:mm a"),
     arrival_time: format(item.arrival_time, "HH:mm a"),
     price: formatter.format(item.price.toNumber()),

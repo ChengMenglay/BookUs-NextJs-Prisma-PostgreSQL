@@ -34,7 +34,7 @@ export default function Footer() {
       header: "Link",
       items: [
         { icon: "", name: "Book Tickets", link: "/book-tickets" },
-        { icon: "", name: "History", link: "/history" },
+        { icon: "", name: "My Booking", link: "/my-booking" },
         { icon: "", name: "About Us", link: "/about" },
         { icon: "", name: "Contact Us", link: "/contact" },
       ],
@@ -68,10 +68,10 @@ export default function Footer() {
     },
   ];
   return (
-    <footer className="w-full bg-slate-900 text-white px-4 py-8">
+    <footer className="w-full px-4 py-8">
       <div className="container mx-auto grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
         {footer.map((footer) => (
-          <div key={footer.header} className="min-h-[300px] space-y-4">
+          <div key={footer.header} className="min-h-[200px] space-y-4">
             <h1 className="font-bold text-2xl">{footer.header}</h1>
             <ul className=" space-y-3">
               {footer.items.map((item, idx) => (
@@ -92,7 +92,7 @@ export default function Footer() {
           </div>
         ))}
         {socailMedia.map((socailMedia) => (
-          <div key={socailMedia.header} className="min-h-[300px] space-y-4">
+          <div key={socailMedia.header} className="min-h-[200px] space-y-2">
             <h1 className="font-bold text-2xl">{socailMedia.header}</h1>
             <ul className=" space-x-3 flex">
               {socailMedia.items.map((item, idx) => (

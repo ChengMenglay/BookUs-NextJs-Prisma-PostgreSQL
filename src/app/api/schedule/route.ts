@@ -9,6 +9,10 @@ export async function POST(req: Request) {
       routeId,
       departure_time,
       arrival_time,
+      boarding_point,
+      boarding_url,
+      dropping_point,
+      dropping_url,
       price,
       frequency,
       available_seat,
@@ -19,6 +23,10 @@ export async function POST(req: Request) {
       !routeId ||
       !departure_time ||
       !arrival_time ||
+      !boarding_point ||
+      !boarding_url ||
+      !dropping_point ||
+      !dropping_url ||
       !price ||
       !available_seat ||
       !status
@@ -31,6 +39,10 @@ export async function POST(req: Request) {
         routeId,
         departure_time,
         arrival_time,
+        boarding_point,
+        boarding_url,
+        dropping_point,
+        dropping_url,
         price,
         available_seat,
         frequency,

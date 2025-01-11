@@ -6,6 +6,7 @@ export type ScheduleColumn = {
   id: string;
   bus: string;
   route: string;
+  departure_date?: string | null;
   departure_time: string;
   arrival_time: string;
   price: string;
@@ -24,6 +25,14 @@ export const columns: ColumnDef<ScheduleColumn>[] = [
   {
     accessorKey: "route",
     header: "Route",
+  },
+  {
+    accessorKey: "departure_date",
+    header: "Departure date",
+    cell: ({ row }) => {
+      const departureDate = row.original.departure_date;
+      return departureDate ? departureDate : "N/A"; // Show "N/A" if departure_date is undefined or null
+    },
   },
   {
     accessorKey: "departure_time",

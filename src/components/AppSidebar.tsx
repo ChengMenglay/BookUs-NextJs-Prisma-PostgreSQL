@@ -4,11 +4,10 @@ import {
   Bus,
   BusFront,
   CalendarDays,
-  ChevronRight,
   ChevronsUpDown,
   Home,
-  HousePlug,
   Route,
+  Ticket,
   UserRoundCog,
 } from "lucide-react";
 import {
@@ -17,7 +16,6 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -71,6 +69,11 @@ export default async function AppSidebar() {
       title: "Schedule",
       url: `/schedule`,
       icon: CalendarDays,
+    },
+    {
+      title: "Ticket",
+      url: `/ticket`,
+      icon: Ticket,
     },
   ];
   return (

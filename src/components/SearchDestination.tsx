@@ -1,7 +1,7 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 import {
   Form,
@@ -27,29 +27,59 @@ import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Calendar } from "./ui/calendar";
+import { Card } from "./ui/card";
+import { useRouter } from "next/navigation";
 
 type searchDestinationProps = {
   province: Province[] | null;
+  origin?: string;
+  destination?: string;
+  departure_date?: Date | null | undefined;
 };
 const formSchema = z.object({
   origin: z.string().min(1, "Origin is required."),
   destination: z.string().min(1, "Destination is required."),
-  departure_date: z.date({
-    required_error: "Departure date is required.",
-  }),
+  departure_date: z.preprocess((value) => new Date(value as string), z.date()),
 });
 type searchDestinationSchema = z.infer<typeof formSchema>;
 export default function SearchDestination({
   province,
+  origin,
+  destination,
+  departure_date,
 }: searchDestinationProps) {
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<searchDestinationSchema>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      origin: origin ? origin : "",
+      destination: destination ? destination : "",
+      departure_date: departure_date ? departure_date : undefined,
+    },
   });
+  const router = useRouter();
+  const { control } = form;
+  const Origin = useWatch({ control, name: "origin" });
+  const Destination = useWatch({ control, name: "destination" });
+  const onSearch = async (data: searchDestinationSchema) => {
+    try {
+      setIsLoading(false);
+      const formattedData = format(data.departure_date, "dd-MM-yyyy");
+      router.push(
+        `/transport/${data.origin.split(" ").join("-")}/${data.destination
+          .split(" ")
+          .join("-")}/${formattedData}`
+      );
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(true);
+    }
+  };
   return (
-    <div className="min-h-[100px] bg-white px-4 rounded-md">
+    <Card className={`min-h-[100px] bg-white px-4`}>
       <Form {...form}>
-        <form>
+        <form onSubmit={form.handleSubmit(onSearch)}>
           <div className="grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 my-4 gap-4">
             <FormField
               control={form.control}
@@ -72,11 +102,13 @@ export default function SearchDestination({
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Origin</SelectLabel>
-                        {province?.map((item) => (
-                          <SelectItem key={item.id} value={item.name}>
-                            {item.name}
-                          </SelectItem>
-                        ))}
+                        {province
+                          ?.filter((item) => item.name !== Destination)
+                          .map((item) => (
+                            <SelectItem key={item.id} value={item.name}>
+                              {item.name}
+                            </SelectItem>
+                          ))}
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -105,11 +137,13 @@ export default function SearchDestination({
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Destination</SelectLabel>
-                        {province?.map((item) => (
-                          <SelectItem key={item.id} value={item.name}>
-                            {item.name}
-                          </SelectItem>
-                        ))}
+                        {province
+                          ?.filter((item) => item.name !== Origin)
+                          .map((item) => (
+                            <SelectItem key={item.id} value={item.name}>
+                              {item.name}
+                            </SelectItem>
+                          ))}
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -166,11 +200,17 @@ export default function SearchDestination({
               )}
             />
             <div className="self-end">
-              <Button className="bg-blue-700 text-white w-full">Search</Button>
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="bg-blue-700 text-white w-full"
+              >
+                Search
+              </Button>
             </div>
           </div>
         </form>
       </Form>
-    </div>
+    </Card>
   );
 }

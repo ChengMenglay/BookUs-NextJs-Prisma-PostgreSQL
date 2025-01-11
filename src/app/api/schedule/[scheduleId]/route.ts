@@ -39,6 +39,10 @@ export async function PATCH(
       routeId,
       departure_time,
       arrival_time,
+      boarding_point,
+      boarding_url,
+      dropping_point,
+      dropping_url,
       price,
       frequency,
       available_seat,
@@ -51,7 +55,11 @@ export async function PATCH(
       !arrival_time ||
       !price ||
       !available_seat ||
-      !status
+      !status ||
+      !boarding_point ||
+      !boarding_url ||
+      !dropping_point ||
+      !dropping_url
     ) {
       return NextResponse.json("All fields are required", { status: 400 });
     }
@@ -62,6 +70,10 @@ export async function PATCH(
         routeId,
         departure_time,
         arrival_time,
+        boarding_point,
+        boarding_url,
+        dropping_point,
+        dropping_url,
         price,
         available_seat,
         frequency,
