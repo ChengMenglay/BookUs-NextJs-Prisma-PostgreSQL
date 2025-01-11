@@ -80,7 +80,7 @@ export function BarChartComponent({ ticket }: BarChartProps) {
     () => ({
       ticket: total_ticket,
     }),
-    [ticket]
+    [total_ticket]
   );
 
   const keys: Array<keyof typeof total> = ["ticket"];
