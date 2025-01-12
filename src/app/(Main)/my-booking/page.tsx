@@ -1,6 +1,5 @@
 import React from "react";
 import MyBookingList from "./MyBookingList";
-import { getAllTicket } from "@/app/dashboard/actions/getTicket";
 import { Separator } from "@/components/ui/separator";
 import { prisma } from "@/lib/prisma";
 import { getUserId } from "@/app/(auth)/actions/authAction";
