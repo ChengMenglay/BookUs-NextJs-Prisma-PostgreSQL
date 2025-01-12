@@ -21,6 +21,7 @@ export async function GET() {
         departure_date: { lt: currentDate },
         status: "Archived",
       },
+      include: { bus: true },
     });
 
     // Prepare new schedules
@@ -35,7 +36,7 @@ export async function GET() {
       dropping_point: schedule.dropping_point,
       dropping_url: schedule.dropping_url,
       price: schedule.price,
-      available_seat: schedule.available_seat,
+      available_seat: schedule.bus.seat,
       status: "Active",
     }));
 
