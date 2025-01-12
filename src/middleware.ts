@@ -1,17 +1,23 @@
 import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import type { NextRequest } from "next/server";
-
 const adminPath = ["/dashboard"];
 const authenticationPath = ["/login", "/register"];
 
 export async function middleware(req: NextRequest) {
-  const token = await getToken({ req, secret: process.env.AUTH_SECRET });
+  const token = await getToken({
+    req,
+    secret: process.env.AUTH_SECRET,
+    cookieName:
+      process.env.NODE_ENV === "production"
+        ? "__Secure-next-auth.session-token"
+        : "authjs.session-token",
+  });
+  console.log("Token======", token);
   const { pathname } = req.nextUrl;
   const baseUrl = process.env.NEXTAUTH_URL;
   const isLoggined = !!token;
   const isAuthRoute = authenticationPath.includes(pathname);
-  console.log("Token in middleware:", token);
 
   if (isLoggined && isAuthRoute) {
     return NextResponse.redirect(`${baseUrl}`);
@@ -24,7 +30,6 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(`${baseUrl}`);
     }
   }
-  console.log("=======Token Role: ", token?.role);
   return NextResponse.next();
 }
 export const config = {
