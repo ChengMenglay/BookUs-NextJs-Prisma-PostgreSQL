@@ -10,10 +10,9 @@ export async function middleware(req: NextRequest) {
     secret: process.env.AUTH_SECRET,
     cookieName:
       process.env.NODE_ENV === "production"
-        ? "__Secure-next-auth.session-token"
+        ? "__Secure-authjs.session-token"
         : "authjs.session-token",
   });
-  console.log("Token======", token);
   const { pathname } = req.nextUrl;
   const baseUrl = process.env.NEXTAUTH_URL;
   const isLoggined = !!token;
