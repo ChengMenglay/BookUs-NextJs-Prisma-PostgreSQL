@@ -53,10 +53,7 @@ export default function TicketComponent({ ticket }: Props) {
 
     if (searchParams?.get("success") === "1") {
       toast.success("Payment Completed.");
-    } else {
-      toast.error("Payment Failed.");
     }
-
     hasAlerted.current = true; // Mark that the alert has been triggered
   }, [searchParams]);
   const router = useRouter();

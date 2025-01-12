@@ -2,9 +2,16 @@ import React from "react";
 import MyBookingList from "./MyBookingList";
 import { getAllTicket } from "@/app/dashboard/actions/getTicket";
 import { Separator } from "@/components/ui/separator";
+import { prisma } from "@/lib/prisma";
+import { getUserId } from "@/app/(auth)/actions/authAction";
 
 export default async function MyBooking() {
-  const tickets = await getAllTicket();
+  const userId = await getUserId();
+  const tickets = await prisma.booking.findMany({
+    where: { userId: userId as string, status: "Completed", isPaid: true },
+    include: { schedule: { include: { route: true, bus: true } } },
+    orderBy: { createdAt: "desc" },
+  });
   const formattedTickets = tickets?.map((ticket) => ({
     ...ticket,
     totalPrice: Number(ticket.totalPrice),
@@ -31,9 +38,13 @@ export default async function MyBooking() {
         <h1 className="text-2xl font-bold">My Booking History</h1>
         <Separator />
         <div>
-          {formattedTickets?.map((ticket) => (
-            <MyBookingList key={ticket.id} ticket={ticket} />
-          ))}
+          {formattedTickets?.length > 0 ? (
+            formattedTickets.map((ticket) => (
+              <MyBookingList key={ticket.id} ticket={ticket} />
+            ))
+          ) : (
+            <h1 className="text-center text-xl mt-5 font-bold">No data</h1>
+          )}
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import dayjs from "dayjs";
+import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
@@ -39,18 +40,10 @@ export async function GET() {
     }));
 
     // Batch create new schedules
-    if (newSchedules.length > 0) {
-      await Promise.all(
-        newSchedules.map((schedule) =>
-          prisma.schedule.create({ data: schedule })
-        )
-      );
-    }
+    await prisma.schedule.createMany({ data: newSchedules });
 
-    return new Response(
-      JSON.stringify({
-        message: `Archived and created ${newSchedules.length} new schedules.`,
-      }),
+    return new NextResponse(
+      `Archived and created ${newSchedules.length} new schedules.`,
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
   } catch (error) {
