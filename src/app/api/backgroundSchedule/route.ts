@@ -7,7 +7,7 @@ export async function GET() {
     const currentDate = dayjs().toDate();
 
     // Archive outdated schedules with booked seats
-    const scheduleUpdated = await prisma.schedule.updateMany({
+    await prisma.schedule.updateMany({
       where: {
         departure_date: { lt: currentDate },
         status: "Active",
