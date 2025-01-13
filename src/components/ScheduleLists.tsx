@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card } from "./ui/card";
 import { Armchair, Info, MapPin } from "lucide-react";
 import { Button } from "./ui/button";
@@ -55,6 +55,7 @@ export default function ScheduleLists({
   userId,
 }: ScheduleListsProps) {
   const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
   const departureTime = new Date(schedule.departure_time);
   let arrivalTime = new Date(schedule.arrival_time);
   if (arrivalTime < departureTime) {
@@ -62,6 +63,10 @@ export default function ScheduleLists({
   }
   const totalMinutes = differenceInMinutes(arrivalTime, departureTime);
   const totalHours = Math.floor(totalMinutes / 60);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  if (!isMounted) return null;
   return (
     <div>
       <div className=" space-y-2 flex flex-col items-center">

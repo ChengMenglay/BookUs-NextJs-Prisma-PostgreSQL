@@ -7,7 +7,7 @@ export async function GET() {
     const currentDate = dayjs().toDate();
 
     // Archive outdated schedules with booked seats
-    await prisma.schedule.updateMany({
+    const scheduleUpdated = await prisma.schedule.updateMany({
       where: {
         departure_date: { lt: currentDate },
         status: "Active",
@@ -15,17 +15,17 @@ export async function GET() {
       data: { status: "Archived" },
     });
 
-    // Retrieve archived schedules
-    const archivedSchedules = await prisma.schedule.findMany({
+    const justArchivedSchedules = await prisma.schedule.findMany({
       where: {
         departure_date: { lt: currentDate },
         status: "Archived",
+        updatedAt: { gte: currentDate }, // Ensure only recently updated ones are fetched
       },
       include: { bus: true },
     });
 
     // Prepare new schedules
-    const newSchedules = archivedSchedules.map(({ ...schedule }) => ({
+    const newSchedules = justArchivedSchedules.map(({ ...schedule }) => ({
       busId: schedule.busId,
       routeId: schedule.routeId,
       departure_date: null, // Update with a valid default if required
@@ -40,9 +40,9 @@ export async function GET() {
       status: "Active",
     }));
 
-    // Batch create new schedules
-    await prisma.schedule.createMany({ data: newSchedules });
-
+    if (newSchedules.length > 0) {
+      await prisma.schedule.createMany({ data: newSchedules });
+    }
     return new NextResponse(
       `Archived and created ${newSchedules.length} new schedules.`,
       { status: 200, headers: { "Content-Type": "application/json" } }

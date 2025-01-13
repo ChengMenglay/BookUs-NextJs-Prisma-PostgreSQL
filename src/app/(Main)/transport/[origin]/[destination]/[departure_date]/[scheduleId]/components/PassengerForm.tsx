@@ -92,7 +92,7 @@ export default function PassengerForm({
     try {
       setIsLoading(true);
       const result = await axios.post(
-        "http://localhost:3000/api/checkout",
+        `${process.env.HOSTING_URL}/api/checkout`,
         {
           scheduleId,
           userId: currentUser?.id,
