@@ -199,7 +199,10 @@ export default function ScheduleForm({
                       <SelectGroup>
                         <SelectLabel>Route</SelectLabel>
                         {route?.map((item) => (
-                          <SelectItem key={item.id} value={item.id}>
+                          <SelectItem
+                            key={`${item.id}-${item.origin}`}
+                            value={item.id}
+                          >
                             {item.origin + " - " + item.destination}
                           </SelectItem>
                         ))}

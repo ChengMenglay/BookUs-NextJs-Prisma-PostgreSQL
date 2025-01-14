@@ -46,7 +46,7 @@ export default function CustomSeatLayout({
     bookedSeat.includes(seat.toString());
   return (
     <div className="space-y-4">
-      <div className="flex justify-between">
+      <div className="sm:flex justify-between space-y-2">
         <div>
           <h1 className="text-lg font-semibold mb-4">
             Please Select Your Seat
