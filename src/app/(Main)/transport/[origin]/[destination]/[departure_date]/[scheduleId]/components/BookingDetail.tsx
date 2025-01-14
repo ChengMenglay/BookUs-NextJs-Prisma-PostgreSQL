@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import PassengerForm from "./PassengerForm";
 import { User } from "@prisma/client";
 import { formatter } from "@/lib/utils";
+import axios from "axios";
 type BooingDetailProps = {
   schedule: {
     id: string;
@@ -52,6 +53,11 @@ type BooingDetailProps = {
   bookedSeat: string[];
   busySeat: string[];
 };
+type Country = {
+  name: {
+    common: string;
+  };
+};
 export default function BookingDetail({
   schedule,
   origin,
@@ -63,6 +69,7 @@ export default function BookingDetail({
   const { selectedSeats } = useSeatSelection();
   const [seatSelection, setSeatSelection] = useState<boolean>(true);
   const [passengerForm, setPassengerForm] = useState<boolean>(false);
+  const [countries, setCountries] = useState<string[]>([]);
   const [isMounted, setIsMounted] = useState<boolean>(false);
   const subTotal = selectedSeats.length * (schedule?.price ?? 0);
   const total = subTotal;
@@ -80,10 +87,26 @@ export default function BookingDetail({
   };
   useEffect(() => {
     setIsMounted(true);
+    getCountryData();
   }, []);
+  const getCountryData = async () => {
+    const response = await axios.get<Country[]>(
+      "https://restcountries.com/v3.1/all",
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const countries = response.data
+      .map((country) => country.name.common)
+      .sort();
+    setCountries(countries);
+  };
   if (!isMounted) {
     return null;
   }
+
   return (
     <>
       <h1 className="text-2xl ">Booking Detail</h1>
@@ -127,6 +150,7 @@ export default function BookingDetail({
                   currentUser={users}
                   scheduleId={schedule?.id as string}
                   handleBackToSeat={handleBackToSeat}
+                  countries={countries}
                 />
               </div>
             </CollapsibleContent>

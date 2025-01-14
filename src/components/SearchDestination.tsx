@@ -105,7 +105,10 @@ export default function SearchDestination({
                         {province
                           ?.filter((item) => item.name !== Destination)
                           .map((item) => (
-                            <SelectItem key={item.id} value={item.name}>
+                            <SelectItem
+                              key={`${item.id}-${item.name}`}
+                              value={item.name}
+                            >
                               {item.name}
                             </SelectItem>
                           ))}
@@ -140,7 +143,10 @@ export default function SearchDestination({
                         {province
                           ?.filter((item) => item.name !== Origin)
                           .map((item) => (
-                            <SelectItem key={item.id} value={item.name}>
+                            <SelectItem
+                              key={`${item.id}-${item.name}`}
+                              value={item.name}
+                            >
                               {item.name}
                             </SelectItem>
                           ))}

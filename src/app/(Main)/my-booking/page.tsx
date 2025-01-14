@@ -32,17 +32,19 @@ export default async function MyBooking() {
       : null,
   }));
   return (
-    <div className="py-20 w-[1200px] mx-auto">
+    <div className="py-20 px-2 container mx-auto">
       <div className=" space-y-3">
         <h1 className="text-2xl font-bold">My Booking History</h1>
         <Separator />
-        <div>
+        <div className="space-y-2">
           {formattedTickets?.length > 0 ? (
             formattedTickets.map((ticket) => (
               <MyBookingList key={ticket.id} ticket={ticket} />
             ))
           ) : (
-            <h1 className="text-center text-xl mt-5 font-bold">No data</h1>
+            <div className="flex justify-center">
+              <h1 className=" text-xl mt-5 font-bold">No data</h1>
+            </div>
           )}
         </div>
       </div>

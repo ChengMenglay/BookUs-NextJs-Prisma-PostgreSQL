@@ -30,17 +30,18 @@ import { useSeatSelection } from "@/context/SeatSelectionContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@prisma/client";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { toast } from "react-toastify";
 import { useParams } from "next/navigation";
-
 type PassengerFormProps = {
   currentUser: User | null;
   scheduleId: string;
   handleBackToSeat: () => void;
+  countries: string[];
 };
+
 const formSchema = z.object({
   nationality: z.string().min(1, "Nationality is required"),
   fullName: z.string().min(3, "Name is required"),
@@ -50,18 +51,13 @@ const formSchema = z.object({
   email: z.string().email(),
 });
 type PassengerFormValue = z.infer<typeof formSchema>;
-type Country = {
-  name: {
-    common: string;
-  };
-};
 export default function PassengerForm({
   scheduleId,
   currentUser,
   handleBackToSeat,
+  countries,
 }: PassengerFormProps) {
   const { selectedSeats } = useSeatSelection();
-  const [countries, setCountries] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const params = useParams();
   const form = useForm<PassengerFormValue>({
@@ -75,19 +71,6 @@ export default function PassengerForm({
       telegramNumber: "",
     },
   });
-
-  useEffect(() => {
-    getCountryData();
-  }, []);
-  const getCountryData = async () => {
-    const response = await axios.get<Country[]>(
-      "https://restcountries.com/v3.1/all"
-    );
-    const countries = response.data
-      .map((country) => country.name.common)
-      .sort();
-    setCountries(countries);
-  };
   const onSubmitted = async (data: PassengerFormValue) => {
     try {
       setIsLoading(true);
@@ -120,93 +103,167 @@ export default function PassengerForm({
     <div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmitted)}>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Total Seat</TableHead>
-                <TableHead>Seat Number</TableHead>
-                <TableHead>Nationality*</TableHead>
-                <TableHead>Full Name*</TableHead>
-                <TableHead>Gender*</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow>
-                <TableCell className="font-medium">
-                  {selectedSeats.length}
-                </TableCell>
-                <TableCell className="font-medium">
-                  {selectedSeats.map((seat) => seat).join(", ")}
-                </TableCell>
-                <TableCell className="font-medium">
-                  <FormField
-                    control={form.control}
-                    name="nationality"
-                    render={({ field }) => (
-                      <FormItem>
-                        <Select
-                          disabled={isLoading}
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Nationality" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {countries.map((item, idx) => (
-                              <SelectItem value={item} key={idx}>
-                                {item}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </TableCell>
-                <TableCell className="font-medium">
-                  <FormField
-                    control={form.control}
-                    name="fullName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <Input placeholder="Full Name" {...field} />
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </TableCell>
-                <TableCell className="font-medium">
-                  <FormField
-                    control={form.control}
-                    name="gender"
-                    render={({ field }) => (
-                      <FormItem>
-                        <Select
-                          disabled={isLoading}
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Gender" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Male">Male</SelectItem>
-                            <SelectItem value="Female">Female</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+          <div className="sm:flex hidden ">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Total Seat</TableHead>
+                  <TableHead className="sm:block hidden">Seat Number</TableHead>
+                  <TableHead>Nationality*</TableHead>
+                  <TableHead>Full Name*</TableHead>
+                  <TableHead>Gender*</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow>
+                  <TableCell className="font-medium">
+                    {selectedSeats.length}
+                  </TableCell>
+                  <TableCell className="font-medium sm:block sm:pt-4 hidden">
+                    <div>{selectedSeats.map((seat) => seat).join(", ")}</div>
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    <FormField
+                      control={form.control}
+                      name="nationality"
+                      render={({ field }) => (
+                        <FormItem>
+                          <Select
+                            disabled={isLoading}
+                            onValueChange={field.onChange}
+                            value={field.value}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select Nationality" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {countries.map((item, idx) => (
+                                <SelectItem value={item} key={idx}>
+                                  {item}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    <FormField
+                      control={form.control}
+                      name="fullName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <Input placeholder="Full Name" {...field} />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    <FormField
+                      control={form.control}
+                      name="gender"
+                      render={({ field }) => (
+                        <FormItem>
+                          <Select
+                            disabled={isLoading}
+                            onValueChange={field.onChange}
+                            value={field.value}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select Gender" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Male">Male</SelectItem>
+                              <SelectItem value="Female">Female</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </div>
+          <div className="sm:hidden space-y-4 my-4 gap-4">
+            <h1 className="text-sm">
+              Total Seat:{" "}
+              <span className="font-bold"> {selectedSeats.length}</span>
+            </h1>
+            <h1 className="text-sm">
+              Seat Number:{" "}
+              <span className="font-bold">
+                {selectedSeats.map((seat) => seat).join(", ")}
+              </span>
+            </h1>
+            <FormField
+              control={form.control}
+              name="nationality"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nationality</FormLabel>
+                  <Select
+                    disabled={isLoading}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Nationality" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {countries.map((item, idx) => (
+                        <SelectItem value={item} key={idx}>
+                          {item}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="fullName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Full name</FormLabel>
+                  <Input placeholder="Full Name" {...field} />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="gender"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Gender</FormLabel>
+                  <Select
+                    disabled={isLoading}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Gender" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Male">Male</SelectItem>
+                      <SelectItem value="Female">Female</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <Separator className="my-4" />
           <h1 className="font-bold text-lg">Contact Detail</h1>
-          <div className="grid grid-cols-3 my-4 gap-4">
+          <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 my-4 gap-4">
             <FormField
               control={form.control}
               name="phoneNumber"
