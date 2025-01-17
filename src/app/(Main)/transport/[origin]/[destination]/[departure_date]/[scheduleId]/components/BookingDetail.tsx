@@ -95,6 +95,7 @@ export default function BookingDetail({
       {
         headers: {
           "Content-Type": "application/json",
+          "Cache-Control": "no-store",
         },
       }
     );
