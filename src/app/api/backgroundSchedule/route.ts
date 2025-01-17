@@ -17,15 +17,13 @@ export async function GET() {
         updatedAt: currentDate, // Ensure the `updatedAt` field is set explicitly
       },
     });
-
-    // Find schedules that were just updated to "Archived"
     const justArchivedSchedules = await prisma.schedule.findMany({
       where: {
         departure_date: { lt: currentDate },
         status: "Archived",
-        updatedAt: { gte: currentDate }, // Only fetch records updated in the last run
+        updatedAt: { gte: dayjs().subtract(1, "minute").toDate() }, // Only fetch records updated in the last run
       },
-      include: { bus: true }, // Fetch bus details as well if needed
+      include: { bus: true },
     });
 
     if (justArchivedSchedules.length === 0) {
