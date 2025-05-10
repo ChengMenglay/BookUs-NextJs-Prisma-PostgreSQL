@@ -22,6 +22,8 @@ export async function GET() {
         departure_date: { lt: currentDate },
         status: "Archived",
         updatedAt: { gte: dayjs().subtract(1, "minute").toDate() }, // Only fetch records updated in the last run
+        bus: { isNot: undefined }, // Change to check if relation exists
+        route: { isNot: undefined }, // Change to check if relation exists
       },
       include: { bus: true },
     });
@@ -34,24 +36,51 @@ export async function GET() {
     }
 
     // Prepare new schedules data by copying the archived schedules
-    const newSchedules = justArchivedSchedules.map((schedule) => ({
-      ...schedule,
-      id: undefined, // Let Prisma auto-generate the new ID
-      departure_date: null, // Set a default value if needed
-      status: "Active", // Reset status to "Active"
-      updatedAt: undefined, // Remove updatedAt to let Prisma auto-set it on creation
-    }));
+    const newSchedules = justArchivedSchedules.map((schedule) => {
+      const baseSchedule = {
+        ...schedule,
+        id: undefined,
+        status: "Active",
+        updatedAt: undefined,
+      };
+      if (schedule.frequency === "daily") {
+        return {
+          ...baseSchedule,
+          departure_date: null,
+        };
+      }
+      return {
+        ...baseSchedule,
+        departure_date: dayjs().add(1, "day").toDate(),
+      };
+    });
 
     // Create new schedules based on the archived ones
-    await prisma.schedule.createMany({ data: newSchedules });
-
-    return new NextResponse(
-      `Archived and created ${newSchedules.length} new schedules.`,
-      {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    try {
+      await prisma.schedule.createMany({ data: newSchedules });
+    } catch (error) {
+      console.error("Error creating new schedules:", error);
+      await prisma.schedule.updateMany({
+        where: {
+          id: { in: justArchivedSchedules.map((s) => s.id) },
+        },
+        data: {
+          status: "Active",
+          updatedAt: currentDate,
+        },
+      });
+      throw error;
+    }
+    const result = {
+      achivedCount: justArchivedSchedules.length,
+      createdCount: newSchedules.length,
+      timestamp: currentDate,
+      success: true,
+    };
+    return new NextResponse(JSON.stringify(result), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
   } catch (error) {
     console.error("Error during the cron job:", error);
     return new Response(JSON.stringify({ error: "Internal Server Error" }), {

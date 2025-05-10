@@ -89,6 +89,17 @@ export default function BookingDetail({
     setIsMounted(true);
     getCountryData();
   }, []);
+
+  useEffect(() => {
+    if (users) {
+      getCountryData(); // Fetch data when a new user logs in
+    }
+  }, [users]);
+  useEffect(() => {
+    if (countries.length === 0) {
+      getCountryData();
+    }
+  }, [countries]);
   const getCountryData = async () => {
     const response = await axios.get<Country[]>(
       "https://restcountries.com/v3.1/all",
@@ -107,7 +118,6 @@ export default function BookingDetail({
   if (!isMounted) {
     return null;
   }
-
   return (
     <>
       <h1 className="text-2xl ">Booking Detail</h1>
